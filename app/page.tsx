@@ -8,6 +8,7 @@ type Enquiry = {
   id: number;
   guest_name: string;
   message: string;
+  phone: string;
   status: string;
   created_at: string;
 };
@@ -24,6 +25,7 @@ export default function Home() {
 
   const [guestName, setGuestName] = useState("");
   const [message, setMessage] = useState("");
+  const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -78,6 +80,7 @@ export default function Home() {
     const { error } = await supabase.from("enquiries").insert({
       guest_name: guestName.trim(),
       message: message.trim(),
+      phone: phone.trim(),
       status: "New",
     });
 
@@ -86,6 +89,7 @@ export default function Home() {
     } else {
       setGuestName("");
       setMessage("");
+      setPhone("");
       await loadEnquiries();
     }
 
@@ -200,6 +204,16 @@ export default function Home() {
                   className="mt-2 w-full rounded-lg border border-slate-300 p-3"
                 />
               </label>
+              <label className="block text-sm font-medium">
+  Phone / WhatsApp number
+  <input
+    required
+    maxLength={20}
+    value={phone}
+    onChange={(event) => setPhone(event.target.value)}
+    className="mt-2 w-full rounded-lg border border-slate-300 p-3"
+  />
+</label>
             </div>
 
             <button
@@ -236,6 +250,16 @@ export default function Home() {
                   </div>
 
                   <p className="mt-2 text-slate-600">{item.message}</p>
+                  {item.phone && (
+  <a
+    href={`https://wa.me/${item.phone.replace(/\D/g, "")}`}
+    target="_blank"
+    rel="noreferrer"
+    className="mt-2 inline-block rounded-lg bg-emerald-600 px-4 py-2 text-sm text-white hover:bg-emerald-700"
+  >
+    WhatsApp {item.phone}
+  </a>
+)}
 
                   <label className="mt-4 block text-sm">
                     Status
