@@ -225,6 +225,14 @@ export default function Home() {
             </button>
           </form>
         </section>
+                <section className="mb-6">
+          <a
+            href="/properties"
+            className="inline-block rounded-lg bg-blue-600 px-5 py-3 font-medium text-white hover:bg-blue-700"
+          >
+            Properties
+          </a>
+        </section>
 
         <section className="rounded-2xl bg-white p-6 shadow-sm">
           <h2 className="mb-5 text-xl font-semibold">Guest enquiries</h2>
