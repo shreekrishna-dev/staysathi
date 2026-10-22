@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
             const { error } = await supabase.from("enquiries").insert({
         guest_name: guestName,
         message: text,
-        phone_whatsapp: phone,
+        phone: phone,
         status: "New",
       });
 
