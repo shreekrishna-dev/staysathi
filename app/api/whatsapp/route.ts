@@ -37,14 +37,18 @@ export async function POST(request: NextRequest) {
         message?.button?.text ||
         "Media message received";
 
-      await supabase.from("enquiries").insert({
+            const { error } = await supabase.from("enquiries").insert({
         guest_name: guestName,
         message: text,
         phone_whatsapp: phone,
         status: "New",
       });
 
-      console.log("New WhatsApp enquiry saved:", guestName, text);
+      if (error) {
+        console.error("WhatsApp enquiry insert failed:", error);
+      } else {
+        console.log("WhatsApp enquiry insert successful");
+      }
     }
 
     return NextResponse.json({ received: true });
