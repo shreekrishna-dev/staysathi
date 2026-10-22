@@ -49,6 +49,43 @@ export async function POST(request: NextRequest) {
       } else {
         console.log("WhatsApp enquiry insert successful");
       }
+            const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+      const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+
+      if (!accessToken || !phoneNumberId) {
+        console.error("WhatsApp reply credentials are missing");
+      } else {
+        const replyResponse = await fetch(
+          `https://graph.facebook.com/v26.0/${phoneNumberId}/messages`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              messaging_product: "whatsapp",
+              to: phone,
+              type: "text",
+              text: {
+                body:
+                  "Namaste! StaySathi ka automated assistant yahan hai. 😊 " +
+                  "Aap kis location mein room dhoondh rahe hain? " +
+                  "Apni check-in/check-out dates aur guests ki sankhya batayein. " +
+                  "Room availability aur final price confirmation ke baad bataya jayega.",
+              },
+            }),
+          }
+        );
+
+        const replyResult = await replyResponse.json();
+
+        if (!replyResponse.ok) {
+          console.error("WhatsApp auto-reply failed:", replyResult);
+        } else {
+          console.log("WhatsApp auto-reply sent successfully");
+        }
+      }
     }
 
     return NextResponse.json({ received: true });
